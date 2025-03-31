@@ -14,8 +14,8 @@ namespace Cobalt
 			freopen_s(&fortFile, "COUNOUT$", "w", stdout);
 			return 0;
 		}
-
-		static BOOL memory(PVOID mem, LPCSTR pattern, LPCSTR mask)
+	private:
+		static BOOL MaskCompare(PVOID mem, LPCSTR pattern, LPCSTR mask)
 		{
 			for (auto ini = static_cast<PBYTE>(mem); *mask; ++pattern, ++mask, ++ini)
 			{
@@ -25,26 +25,26 @@ namespace Cobalt
 			return true;
 		}
 
-		static PBYTE memorypattern(PVOID base, DWORD dw, LPCSTR pattern, LPCSTR mask)
+		static PBYTE FindPattern(PVOID base, DWORD dw, LPCSTR pattern, LPCSTR mask)
 		{
 			dw -= static_cast<DWORD>(strlen(mask));
 			for (auto i = 0UL; i < dw; ++i)
 			{
 				auto add = static_cast<PBYTE>(base) + i;
-				if (memory(add, pattern, mask))
+				if (MaskCompare(add, pattern, mask))
 				{
 					return add;
 				}
 			}
 			return NULL;
 		}
-
+	public:
 		static uintptr_t FortAddress()
 		{
 			return reinterpret_cast<uintptr_t>(GetModuleHandle(0));
 		}
 
-		static PBYTE fortmememory(LPCSTR pattern, LPCSTR mask)
+		static PBYTE FindPattern(LPCSTR pattern, LPCSTR mask)
 		{
 			MODULEINFO info{};
 			GetModuleInformation(GetCurrentProcess(), GetModuleHandle(0), &info, sizeof(info));
@@ -52,7 +52,7 @@ namespace Cobalt
 			PBYTE add = NULL;
 			do
 			{
-				add = memorypattern(info.lpBaseOfDll, info.SizeOfImage, pattern, mask);
+				add = FindPattern(info.lpBaseOfDll, info.SizeOfImage, pattern, mask);
 				Sleep(50);
 			} while (!add);
 

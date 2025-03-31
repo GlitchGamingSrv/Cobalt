@@ -6,10 +6,7 @@ namespace Cobalt
 	{
 		FortniteUtilConsole();
 		printf("Getting FortConsole...\n");
-		memory;
-		memorypattern;
 		printf("Generating Memory Patterns...\n");
 		FortAddress;
-		fortmememory;
 	}
 }
