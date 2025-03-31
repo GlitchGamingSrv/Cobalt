@@ -1,0 +1,12 @@
+#pragma once
+#include <Windows.h>
+#include <ostream>
+#include <fstream>
+#include <string>
+#include <imgui.h>
+#include <backends/imgui_impl_dx12.h>
+#include <backends/imgui_impl_glfw.h>
+#include <winscard.h>
+#include <backends/imgui_impl_glut.h>
+#include <gl/GL.h>
+#include <psapi.h>
